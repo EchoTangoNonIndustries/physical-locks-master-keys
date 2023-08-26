@@ -25,12 +25,31 @@ type Key struct {
 
 // Lock counts pin stacks from outside to the inside.
 type Lock struct {
-	Room string
-	Pins []PinStack
+	Room      string
+	PinStacks []PinStack
 }
 
-func (lock *Lock) OpensWith(k *Key) bool {
-	return false
+func (lock *Lock) OpensWith(key *Key) bool {
+	if lock == nil || len(lock.PinStacks) == 0 || len(key.Cuts) == 0 {
+		return false
+	}
+
+	for kc, keyCut := range key.Cuts {
+	NextCut:
+		if kc >= len(lock.PinStacks) {
+			return false
+		}
+		pinStack := lock.PinStacks[kc]
+		shearLine := 0
+		for _, pin := range pinStack {
+			shearLine += pin
+			if keyCut == shearLine {
+				continue NextCut
+			}
+		}
+		return false
+	}
+	return true
 }
 
 // PinStack is a list of pin sizes, starting from the lowest (key) pin.
