@@ -1,1 +1,1 @@
-This repository will hold tools to aid in re-keying locks for master keys.
+This repository will hold tools to aid in re-pinning locks for master keys.
